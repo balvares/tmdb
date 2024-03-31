@@ -8,9 +8,13 @@ import 'package:tmdb/app/modules/login/presenter/controllers/login_controller.da
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  late String userTest;
+  late String passwordTest;
 
   setUpAll(() {
     Get.put(LoginController());
+    userTest = "teste@teste.com";
+    passwordTest = "teste123";
   });
 
   testWidgets('LoginPage - Construção da página', (WidgetTester tester) async {
@@ -43,16 +47,13 @@ void main() {
     final passwordFieldFinder = find.byKey(const Key(loginPasswordKey));
     final buttonFinder = find.byKey(const Key(loginButtonKey));
 
-    // Deixe os campos de usuário e senha vazios e pressione o botão de login
     await tester.tap(buttonFinder);
     await tester.pump();
 
-    // Verifique se as mensagens de erro corretas são exibidas
     expect(find.text('Preencha este campo.'), findsAny);
 
-    // Digite um nome de usuário e senha válidos e verifique se nenhuma mensagem de erro é exibida
-    await tester.enterText(userFieldFinder, 'usuário válido');
-    await tester.enterText(passwordFieldFinder, 'senha válida');
+    await tester.enterText(userFieldFinder, userTest);
+    await tester.enterText(passwordFieldFinder, passwordTest);
     await tester.tap(buttonFinder);
     await tester.pump();
 
@@ -71,13 +72,11 @@ void main() {
     final passwordFieldFinder = find.byKey(const Key(loginPasswordKey));
     final buttonFinder = find.byKey(const Key(loginButtonKey));
 
-    // Deixe os campos de usuário e senha vazios e pressione o botão de login
-    await tester.enterText(userFieldFinder, 'teste@teste.com');
-    await tester.enterText(passwordFieldFinder, 'teste123');
+    await tester.enterText(userFieldFinder, userTest);
+    await tester.enterText(passwordFieldFinder, passwordTest);
     await tester.tap(buttonFinder);
     await tester.pump();
 
-    // Verifique se as mensagens de erro corretas são exibidas
     expect(find.text('Preencha este campo.'), findsNothing);
   });
 }
