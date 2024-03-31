@@ -4,7 +4,6 @@ import 'package:tmdb/shared/shared.dart';
 
 import '../controllers/login_controller.dart';
 import '../../../../../shared/widgets/widgets.dart';
-import '../../../../../shared/constants/strings.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,30 +13,47 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   final controller = Get.find<LoginController>();
 
   Widget _body() {
     return Padding(
       padding: const EdgeInsets.all(layoutSpace16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Boas vindas ao TMDB 😉",
-            style: TextStyle(color: TmdbColors.light),
-          ),
-          TmdbTextInput(
-            labelText: loginPageFieldUser,
-            controller: controller.userController,
-          ),
-          const SizedBox(height: layoutSpace16),
-          TmdbTextInput(
-            labelText: loginPageFieldPassword,
-            controller: controller.passwordController,
-          ),
-          const SizedBox(height: layoutSpace32),
-          const TmdbButton(label: loginPageButtonLogin),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TmdbTitle(
+              text: "Boas vindas ao TMDB! 😉",
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: layoutSpace32),
+            TmdbTextInput(
+              labelText: "Usuário",
+              controller: controller.userController,
+            ),
+            const SizedBox(height: layoutSpace16),
+            TmdbTextInput(
+              labelText: "Senha",
+              controller: controller.passwordController,
+            ),
+            const SizedBox(height: layoutSpace32),
+            Center(
+              child: TmdbButton(
+                label: "Entrar",
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -45,8 +61,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TmdbColors.background,
       body: _body(),
+      backgroundColor: TmdbColors.background,
     );
   }
 }

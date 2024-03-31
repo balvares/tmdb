@@ -14,15 +14,32 @@ class TmdbTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Preencha este campo.";
+        }
+        return null;
+      },
+      style: const TextStyle(color: TmdbColors.light),
       decoration: InputDecoration(
-        labelText: labelText,
-        focusColor: TmdbColors.light,
-        border: const UnderlineInputBorder(),
-        focusedBorder: const UnderlineInputBorder(),
-        floatingLabelStyle: const TextStyle(color: TmdbColors.primary),
-      ),
+          labelText: labelText,
+          labelStyle: const TextStyle(color: TmdbColors.primary),
+          floatingLabelStyle: const TextStyle(color: TmdbColors.primary),
+          border: const UnderlineInputBorder(
+            borderSide: BorderSide(color: TmdbColors.light),
+          ),
+          focusColor: TmdbColors.light,
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: TmdbColors.light),
+          ),
+          errorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: TmdbColors.redError),
+          ),
+          errorStyle: const TextStyle(
+            color: TmdbColors.redError,
+          )),
     );
   }
 }

@@ -14,6 +14,7 @@ class AppTmdb extends StatelessWidget {
       title: 'The Movie Database App',
       theme: ThemeData(
         useMaterial3: true,
+        // textTheme: GoogleFonts.ubuntuTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: TmdbColors.primary),
       ),
       getPages: AppPages.pages,
