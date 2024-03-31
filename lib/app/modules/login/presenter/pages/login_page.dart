@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:tmdb/shared/shared.dart';
 
-import '../../../../../shared/constants/keys.dart';
+import '../../../../../shared/shared.dart';
+import '../../../../core/routes/routes.dart';
 import '../controllers/login_controller.dart';
+import '../../../../../shared/constants/keys.dart';
 import '../../../../../shared/widgets/widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -50,9 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                 label: "Entrar",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processing Data')),
-                    );
+                    Get.toNamed(Routes.home);
                   }
                 },
               ),

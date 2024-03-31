@@ -12,9 +12,9 @@ class AppTmdb extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'The Movie Database App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        // textTheme: GoogleFonts.ubuntuTextTheme(),
         colorScheme: ColorScheme.fromSeed(seedColor: TmdbColors.primary),
       ),
       getPages: AppPages.pages,
