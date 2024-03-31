@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../shared.dart';
 
-class TmdbTitle extends StatelessWidget {
-  const TmdbTitle({
+class TmdbLabel extends StatelessWidget {
+  const TmdbLabel({
     super.key,
     required this.text,
     this.fontSize = layoutSpace16,
     this.textAlign = TextAlign.start,
-    this.color = TmdbColors.primary,
+    this.color = TmdbColors.secondary,
     this.fontWeight = FontWeight.normal,
   });
 

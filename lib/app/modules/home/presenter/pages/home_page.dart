@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb/shared/widgets/tmdb_label.dart';
 
 import '../../../../../shared/shared.dart';
 import '../../../../../shared/constants/keys.dart';
@@ -20,12 +21,30 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       backgroundColor: TmdbColors.background,
       drawer: Drawer(
+        shadowColor: Colors.transparent,
+        backgroundColor: TmdbColors.dark,
         child: ListView(
+          padding: const EdgeInsets.only(
+            top: layoutSpace48,
+            left: layoutSpace16,
+            right: layoutSpace16,
+            bottom: layoutSpace48,
+          ),
           children: const <Widget>[
-            DrawerHeader(
-                child: TmdbTitle(
-              text: 'Header',
-            ))
+            TmdbTitle(
+              text: 'Olá, Bruna! 😀',
+              color: TmdbColors.secondary,
+              fontSize: layoutSpace24,
+            ),
+            SizedBox(height: layoutSpace16),
+            Divider(color: TmdbColors.primary),
+            SizedBox(height: layoutSpace16),
+            ListTile(
+              title: TmdbLabel(
+                text: "Filmes",
+                color: TmdbColors.secondary,
+              ),
+            ),
           ],
         ),
       ),
