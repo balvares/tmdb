@@ -7,10 +7,12 @@ class TmdbTextInput extends StatelessWidget {
     super.key,
     required this.labelText,
     required this.controller,
+    this.isPassword = false,
   });
 
   final String labelText;
   final TextEditingController controller;
+  final bool isPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class TmdbTextInput extends StatelessWidget {
         return null;
       },
       style: const TextStyle(color: TmdbColors.light),
+      obscureText: isPassword,
       decoration: InputDecoration(
           labelText: labelText,
           labelStyle: const TextStyle(color: TmdbColors.primary),

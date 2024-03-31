@@ -16,8 +16,8 @@ class TmdbAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: title,
-      backgroundColor: TmdbColors.background,
       leading: leading,
+      backgroundColor: TmdbColors.background,
     );
   }
 

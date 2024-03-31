@@ -18,6 +18,13 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final controller = Get.find<LoginController>();
 
+  @override
+  void initState() {
+    super.initState();
+    controller.userController.text = 'teste@teste.com';
+    controller.passwordController.text = 'teste123';
+  }
+
   Widget _body() {
     return Padding(
       padding: const EdgeInsets.all(layoutSpace16),
@@ -34,14 +41,15 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: layoutSpace32),
             TmdbTextInput(
-              key: const Key(loginUserKey),
               labelText: "Usuário",
+              key: const Key(loginUserKey),
               controller: controller.userController,
             ),
             const SizedBox(height: layoutSpace16),
             TmdbTextInput(
-              key: const Key(loginPasswordKey),
+              isPassword: true,
               labelText: "Senha",
+              key: const Key(loginPasswordKey),
               controller: controller.passwordController,
             ),
             const SizedBox(height: layoutSpace32),
