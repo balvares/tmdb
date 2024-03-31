@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../shared/shared.dart';
+import '../../../../../shared/constants/keys.dart';
+import '../../../../../shared/widgets/widgets.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -10,6 +14,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      backgroundColor: TmdbColors.background,
+      appBar: TmdbAppBar(
+        key: const Key(homeAppBarKey),
+        title: const TmdbTitle(text: "Início"),
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.menu, color: TmdbColors.primary),
+        ),
+      ),
+    );
   }
 }
