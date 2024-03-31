@@ -1,19 +1,23 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'modules/login/presenter/pages/login_page.dart';
+import 'core/routes/pages.dart';
+import 'core/routes/routes.dart';
+import '../shared/colors/tmdb_colors.dart';
 
 class AppTmdb extends StatelessWidget {
   const AppTmdb({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'The Movie Database App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: TmdbColors.primary),
       ),
-      home: const LoginPage(),
+      getPages: AppPages.pages,
+      initialRoute: Routes.login,
     );
   }
 }
