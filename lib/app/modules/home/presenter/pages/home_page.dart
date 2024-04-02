@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   final controller = Get.find<HomeController>();
 
   Widget _buildBody() {
+    // return Obx(() {
     return TabBarView(
       children: [
         Padding(
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 4, right: 4),
                     child: TmdbLabel(
                       fontSize: 10,
-                      text: controller.items[index]["original_title"],
+                      text: controller.items[index]["title"],
                     ),
                   ),
                 ],
@@ -80,6 +81,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+    // });
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -94,8 +96,8 @@ class _HomePageState extends State<HomePage> {
         dividerColor: Colors.transparent,
         indicatorColor: TmdbColors.primary,
         tabs: [
-          Tab(child: TmdbLabel(text: 'Em cartaz', fontSize: 12)),
           Tab(child: TmdbLabel(text: 'Popular', fontSize: 12)),
+          Tab(child: TmdbLabel(text: 'Em breve', fontSize: 12)),
         ],
       ),
     );
