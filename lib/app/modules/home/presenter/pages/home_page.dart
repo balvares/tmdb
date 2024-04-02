@@ -1,6 +1,8 @@
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../shared/shared.dart';
+import '../controllers/home_controller.dart';
 import '../../../../../shared/constants/keys.dart';
 import '../../../../../shared/widgets/widgets.dart';
 
@@ -13,33 +15,70 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final List<String> items = [
-    'filme1',
-    'filme2',
-    'filme3',
-    'filme4',
-  ];
+  final controller = Get.find<HomeController>();
 
   Widget _buildBody() {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1 / 1.8,
-        ),
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return const Card(
-            child: Center(
-              child: Text(
-                'aaaaaaa', // Texto do item
-                style: TextStyle(fontSize: 20),
-              ),
+    return TabBarView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1 / 1.8,
             ),
-          );
-        },
-      ),
+            itemCount: controller.items.length,
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Card(
+                    child: Image.network(
+                      "https://image.tmdb.org/t/p/w500${controller.items[index]["poster_path"]}",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    child: TmdbLabel(
+                      fontSize: 10,
+                      text: controller.items[index]["original_title"],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 1 / 1.8,
+            ),
+            itemCount: controller.items.length,
+            itemBuilder: (context, index) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Card(
+                    child: Image.network(
+                      "https://image.tmdb.org/t/p/w500${controller.items[index]["poster_path"]}",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    child: TmdbLabel(
+                      fontSize: 10,
+                      text: controller.items[index]["original_title"],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -51,17 +90,28 @@ class _HomePageState extends State<HomePage> {
         icon: const Icon(Icons.menu, color: TmdbColors.primary),
         onPressed: () => scaffoldKey.currentState!.openDrawer(),
       ),
+      bottom: const TabBar(
+        dividerColor: Colors.transparent,
+        indicatorColor: TmdbColors.primary,
+        tabs: [
+          Tab(child: TmdbLabel(text: 'Em cartaz', fontSize: 12)),
+          Tab(child: TmdbLabel(text: 'Popular', fontSize: 12)),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: _buildAppBar(),
-      drawer: const TmdbDrawer(),
-      backgroundColor: TmdbColors.background,
-      body: _buildBody(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        key: scaffoldKey,
+        appBar: _buildAppBar(),
+        drawer: const TmdbDrawer(),
+        backgroundColor: TmdbColors.background,
+        body: _buildBody(),
+      ),
     );
   }
 }
