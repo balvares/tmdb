@@ -1,43 +1,26 @@
-import '../entities/movie_entity.dart';
+import 'package:tmdb/app/core/providers/movies/domain/entities/movie_entity.dart';
+import 'package:tmdb/app/core/providers/movies/domain/models/movie_result_model.dart';
 
 class MovieModel extends MovieEntity {
   MovieModel({
-    required super.adult,
-    required super.backdropPath,
-    required super.genreIds,
-    required super.id,
-    required super.originalLanguage,
-    required super.originalTitle,
-    required super.overview,
-    required super.popularity,
-    required super.posterPath,
-    required super.releaseDate,
-    required super.title,
-    required super.video,
-    required super.voteAverage,
-    required super.voteCount,
+    required super.page,
+    required super.totalPages,
+    required super.totalResults,
+    required super.result,
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
-        adult: json['adult'],
-        backdropPath: json['backdrop_path'],
-        genreIds: json['genre_ids'],
-        id: json['id'],
-        originalLanguage: json['original_language'],
-        originalTitle: json['original_title'],
-        overview: json['overview'],
-        popularity: json['popularity'],
-        posterPath: json['poster_path'],
-        releaseDate: json['release_date'],
-        title: json['title'],
-        video: json['video'],
-        voteAverage: json['vote_average'],
-        voteCount: json['vote_count'],
-      );
+  factory MovieModel.fromJson(Map<String, dynamic> json) {
+    return MovieModel(
+      page: json['page'],
+      totalPages: json['total_pages'],
+      totalResults: json['total_results'],
+      result: fromListJson(json['results'] as List<dynamic>),
+    );
+  }
 
-  static List<MovieModel> fromListJson(List<dynamic> listJson) {
+  static List<MovieResultModel> fromListJson(List<dynamic> listJson) {
     return listJson
-        .map((e) => MovieModel.fromJson(e as Map<String, dynamic>))
+        .map((e) => MovieResultModel.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 }

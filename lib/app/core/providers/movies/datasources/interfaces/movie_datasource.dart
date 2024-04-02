@@ -1,7 +1,7 @@
-import 'package:tmdb/app/core/providers/movies/domain/entities/movie_entity.dart';
+import '../../domain/entities/movie_entity.dart';
 
 abstract interface class MovieDatasource {
-  Future<List<MovieEntity>> getUpcomingMovies();
+  Future<MovieEntity> getUpcomingMovies();
 
-  Future<List<MovieEntity>> getPopularMovies();
+  Future<MovieEntity> getPopularMovies();
 }

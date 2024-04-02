@@ -14,74 +14,83 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   final controller = Get.find<HomeController>();
 
+  Widget _buildTabPopular() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1 / 1.8,
+        ),
+        itemCount: controller.popularMovies!.result.length,
+        itemBuilder: (context, index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                child: Image.network(
+                  "${controller.imageUrl}${controller.popularMovies!.result[index].posterPath}",
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: TmdbLabel(
+                    fontSize: 10,
+                    text: controller.popularMovies!.result[index].title,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTabUpcoming() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1 / 1.8,
+        ),
+        itemCount: controller.upcomingMovies!.result.length,
+        itemBuilder: (context, index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                child: Image.network(
+                  "${controller.imageUrl}${controller.upcomingMovies!.result[index].posterPath}",
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: TmdbLabel(
+                    fontSize: 10,
+                    text: controller.upcomingMovies!.result[index].title,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildBody() {
-    // return Obx(() {
     return TabBarView(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1 / 1.8,
-            ),
-            itemCount: controller.items.length,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    child: Image.network(
-                      "https://image.tmdb.org/t/p/w500${controller.items[index]["poster_path"]}",
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: TmdbLabel(
-                      fontSize: 10,
-                      text: controller.items[index]["original_title"],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1 / 1.8,
-            ),
-            itemCount: controller.items.length,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    child: Image.network(
-                      "https://image.tmdb.org/t/p/w500${controller.items[index]["poster_path"]}",
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4, right: 4),
-                    child: TmdbLabel(
-                      fontSize: 10,
-                      text: controller.items[index]["title"],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
+        _buildTabPopular(),
+        _buildTabUpcoming(),
       ],
     );
-    // });
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -90,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       title: const TmdbTitle(text: "Início"),
       leading: IconButton(
         icon: const Icon(Icons.menu, color: TmdbColors.primary),
-        onPressed: () => scaffoldKey.currentState!.openDrawer(),
+        onPressed: () => controller.scaffoldKey.currentState!.openDrawer(),
       ),
       bottom: const TabBar(
         dividerColor: Colors.transparent,
@@ -108,7 +117,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        key: scaffoldKey,
+        key: controller.scaffoldKey,
         appBar: _buildAppBar(),
         drawer: const TmdbDrawer(),
         backgroundColor: TmdbColors.background,
