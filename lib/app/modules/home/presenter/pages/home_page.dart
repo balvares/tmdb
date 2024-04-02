@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4, right: 4),
                   child: TmdbLabel(
-                    fontSize: 10,
+                    fontSize: controller.fontSize,
                     text: controller.popularMovies!.result[index].title,
                   ),
                 ),
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4, right: 4),
                   child: TmdbLabel(
-                    fontSize: 10,
+                    fontSize: controller.fontSize,
                     text: controller.upcomingMovies!.result[index].title,
                   ),
                 ),
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
         dividerColor: Colors.transparent,
         indicatorColor: TmdbColors.primary,
         tabs: [
-          Tab(child: TmdbLabel(text: 'Popular', fontSize: 12)),
+          Tab(child: TmdbLabel(text: 'Populares', fontSize: 12)),
           Tab(child: TmdbLabel(text: 'Em breve', fontSize: 12)),
         ],
       ),

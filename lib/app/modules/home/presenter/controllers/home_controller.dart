@@ -350,8 +350,8 @@ class HomeController extends GetxController {
     }
   ];
 
-  GetPopularMoviesUsecase _getPopularMoviesUsecase;
-  GetUpcomingMoviesUsecase _getUpcomingMoviesUsecase;
+  final GetPopularMoviesUsecase _getPopularMoviesUsecase;
+  final GetUpcomingMoviesUsecase _getUpcomingMoviesUsecase;
 
   HomeController({
     required GetPopularMoviesUsecase getPopularMoviesUsecase,
@@ -374,6 +374,7 @@ class HomeController extends GetxController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final imageUrl = Environment.imageUrl;
+  final double fontSize = 10;
 
   @override
   void onReady() {
