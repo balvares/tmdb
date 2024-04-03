@@ -8,11 +8,13 @@ class TmdbAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     required this.leading,
     this.bottom,
+    this.height = kToolbarHeight,
   });
 
   final Widget title;
   final Widget leading;
   final dynamic bottom;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -25,5 +27,5 @@ class TmdbAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(height);
 }

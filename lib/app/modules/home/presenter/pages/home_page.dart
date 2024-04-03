@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb/app/core/routes/routes.dart';
+import 'package:tmdb/app/core/shared/enum/state.dart';
 
 import '../../../../../shared/shared.dart';
 import '../controllers/home_controller.dart';
@@ -26,24 +28,29 @@ class _HomePageState extends State<HomePage> {
         ),
         itemCount: controller.popularMovies!.result.length,
         itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                child: Image.network(
-                  "${controller.imageUrl}${controller.popularMovies!.result[index].posterPath}",
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4),
-                  child: TmdbLabel(
-                    fontSize: controller.fontSize,
-                    text: controller.popularMovies!.result[index].title,
+          return GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.movieDetail);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  child: Image.network(
+                    "${controller.imageUrl}${controller.popularMovies!.result[index].posterPath}",
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    child: TmdbLabel(
+                      fontSize: controller.fontSize,
+                      text: controller.popularMovies!.result[index].title,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -60,24 +67,29 @@ class _HomePageState extends State<HomePage> {
         ),
         itemCount: controller.upcomingMovies!.result.length,
         itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                child: Image.network(
-                  "${controller.imageUrl}${controller.upcomingMovies!.result[index].posterPath}",
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4),
-                  child: TmdbLabel(
-                    fontSize: controller.fontSize,
-                    text: controller.upcomingMovies!.result[index].title,
+          return GestureDetector(
+            onTap: () {
+              Get.toNamed(Routes.movieDetail);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  child: Image.network(
+                    "${controller.imageUrl}${controller.upcomingMovies!.result[index].posterPath}",
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    child: TmdbLabel(
+                      fontSize: controller.fontSize,
+                      text: controller.upcomingMovies!.result[index].title,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -93,8 +105,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildLoading() {
+    return const CircularProgressIndicator(
+      backgroundColor: TmdbColors.background,
+      color: TmdbColors.primary,
+    );
+  }
+
   PreferredSizeWidget _buildAppBar() {
     return TmdbAppBar(
+      height: kToolbarHeight + 48,
       key: const Key(homeAppBarKey),
       title: const TmdbTitle(text: "Início"),
       leading: IconButton(
@@ -116,13 +136,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        key: controller.scaffoldKey,
-        appBar: _buildAppBar(),
-        drawer: const TmdbDrawer(),
-        backgroundColor: TmdbColors.background,
-        body: _buildBody(),
-      ),
+      child: Obx(() {
+        switch (controller.state) {
+          case StateType.load:
+            return _buildLoading();
+          case StateType.success:
+            return Scaffold(
+              appBar: _buildAppBar(),
+              body: _buildBody(),
+              drawer: const TmdbDrawer(),
+              key: controller.scaffoldKey,
+              backgroundColor: TmdbColors.background,
+            );
+        }
+        return Container();
+      }),
     );
   }
 }

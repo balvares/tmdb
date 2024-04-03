@@ -16,19 +16,20 @@ class MovieRepositoryImpl implements MovieRepository {
 
   @override
   Future<MovieEntity> getUpcomingMovies() async {
-    MovieEntity upcomingMoviesRaw;
-    upcomingMoviesRaw = await _datasource.getUpcomingMovies();
+    // MovieEntity upcomingMoviesRaw;
+    // upcomingMoviesRaw = await _datasource.getUpcomingMovies();
 
-    MovieEntity upcomingMoviesTreated;
-    upcomingMoviesTreated = MovieEntity(
-      page: upcomingMoviesRaw.page,
-      totalPages: upcomingMoviesRaw.totalPages,
-      totalResults: upcomingMoviesRaw.totalResults,
-      result: upcomingMoviesRaw.result
-          .where((movie) => movie.releaseDate.isAfter(DateTime.now()))
-          .toList(),
-    );
+    // MovieEntity upcomingMoviesTreated;
+    // upcomingMoviesTreated = MovieEntity(
+    //   page: upcomingMoviesRaw.page,
+    //   totalPages: upcomingMoviesRaw.totalPages,
+    //   totalResults: upcomingMoviesRaw.totalResults,
+    //   result: upcomingMoviesRaw.result
+    //       .where((movie) => movie.releaseDate.isAfter(DateTime.now()))
+    //       .toList(),
+    // );
 
-    return upcomingMoviesTreated;
+    // return upcomingMoviesTreated;
+    return _datasource.getUpcomingMovies();
   }
 }

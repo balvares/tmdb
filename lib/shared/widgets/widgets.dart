@@ -4,3 +4,4 @@ export 'tmdb_drawer.dart';
 export 'tmdb_label.dart';
 export 'tmdb_text_input.dart';
 export 'tmdb_title.dart';
+export 'tmdb_title_giant.dart';

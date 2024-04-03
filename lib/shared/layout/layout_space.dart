@@ -13,3 +13,4 @@ const double layoutSpace44 = 44;
 const double layoutSpace48 = 48;
 const double layoutSpace52 = 52;
 const double layoutSpace56 = 56;
+const double layoutSpace120 = 120;
