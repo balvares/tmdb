@@ -56,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             Center(
               child: TmdbButton(
                 key: const Key(loginButtonKey),
+                width: MediaQuery.of(context).size.width,
                 label: "Entrar",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {

@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:tmdb/app/core/providers/movie_detail/usecases/interfaces/get_movie_detail_usecase.dart';
 
-import '../../../../core/providers/movie_detail/domain/entities/movie_detail_entity.dart';
 import '../../../../core/shared/enum/state.dart';
-import '../../../../core/shared/errors/http_exception.dart';
 import '../../../../core/shared/utils/enviroment.dart';
+import '../../../../core/shared/errors/http_exception.dart';
+import '../../../../core/providers/movie_detail/domain/entities/movie_detail_entity.dart';
+import '../../../../core/providers/movie_detail/usecases/interfaces/get_movie_detail_usecase.dart';
 
 class MovieDetailController extends GetxController {
   final GetMovieDetailUsecase _getMovieDetailUsecase;
@@ -26,6 +26,7 @@ class MovieDetailController extends GetxController {
   final imageUrl = Environment.imageUrl;
   late int movieId;
   Map<String, dynamic> params = {};
+  final minRatingValue = 1.0.obs;
 
   final List<String> genreList = [];
 

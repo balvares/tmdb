@@ -43,7 +43,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     // }
     return TmdbLabel(
       text:
-          '$emoji ${controller.movieDetail?.voteAverage.toStringAsFixed(1)}/10',
+          'Nota: $emoji ${controller.movieDetail?.voteAverage.toStringAsFixed(1)}/10',
     );
   }
 
@@ -65,7 +65,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 ),
                 const SizedBox(height: layoutSpace4),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TmdbLabel(
                       fontSize: layoutSpace12,
@@ -73,7 +72,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                       text:
                           '${controller.movieDetail?.runtime.toString()}m | ${controller.movieDetail?.releaseDate.year.toString()}',
                     ),
-                    _buildRatingValue(),
                   ],
                 ),
                 Row(
@@ -97,13 +95,73 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   textAlign: TextAlign.justify,
                   text: controller.movieDetail?.tagline ?? '',
                 ),
-                const SizedBox(height: layoutSpace48),
+                const SizedBox(height: layoutSpace16),
+                // adicionar aqui o botão de avaliar filme
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildRatingValue(),
+                    TmdbButton(
+                      width: 100,
+                      label: 'Avaliar',
+                      fontSize: layoutSpace12,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return _buildRatingDialog();
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildRatingDialog() {
+    return Obx(() {
+      return AlertDialog(
+        backgroundColor: TmdbColors.dark,
+        title: const TmdbLabel(
+          text: 'De 1 a 10, que nota você dá para este filme?',
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Slider(
+              value: controller.minRatingValue.value,
+              min: 1.0,
+              max: 10.0,
+              divisions: 9,
+              onChanged: (double value) {
+                controller.minRatingValue.value = value;
+              },
+            ),
+            TmdbLabel(text: 'Nota ${controller.minRatingValue.value.toInt()}!'),
+          ],
+        ),
+        actions: <Widget>[
+          TmdbButton(
+            label: 'Cancelar',
+            onPressed: () => Get.back(),
+          ),
+          TmdbButton(
+            label: 'Enviar',
+            onPressed: () {
+              // Aqui você pode usar o valor do slider, por exemplo, enviá-lo para algum lugar.
+              print('Valor selecionado: ${controller.minRatingValue.value}');
+              Get.back();
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildLoading() {
