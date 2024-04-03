@@ -24,7 +24,6 @@ class HomeBinding extends Bindings {
         repository: Get.find<MovieRepositoryImpl>(),
       ),
     );
-
     Get.lazyPut(
       () => GetUpcomingMoviesUsecaseImpl(
         repository: Get.find<MovieRepositoryImpl>(),

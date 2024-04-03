@@ -30,7 +30,9 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.movieDetail);
+              Get.toNamed(Routes.movieDetail, parameters: {
+                "id": controller.popularMovies!.result[index].id.toString()
+              });
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,9 +108,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildLoading() {
-    return const CircularProgressIndicator(
-      backgroundColor: TmdbColors.background,
-      color: TmdbColors.primary,
+    return const Center(
+      child: CircularProgressIndicator(
+        backgroundColor: TmdbColors.background,
+        color: TmdbColors.primary,
+      ),
     );
   }
 

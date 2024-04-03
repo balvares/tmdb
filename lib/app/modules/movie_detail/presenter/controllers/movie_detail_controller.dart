@@ -1,69 +1,63 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb/app/core/providers/movie_detail/usecases/interfaces/get_movie_detail_usecase.dart';
 
+import '../../../../core/providers/movie_detail/domain/entities/movie_detail_entity.dart';
+import '../../../../core/shared/enum/state.dart';
+import '../../../../core/shared/errors/http_exception.dart';
 import '../../../../core/shared/utils/enviroment.dart';
 
 class MovieDetailController extends GetxController {
+  final GetMovieDetailUsecase _getMovieDetailUsecase;
+
+  MovieDetailController({
+    required GetMovieDetailUsecase getMovieDetailUsecase,
+  }) : _getMovieDetailUsecase = getMovieDetailUsecase;
+
+  final _state = StateType.load.obs;
+  get state => _state.value;
+  set state(value) => _state.value = value;
+
+  final _movieDetail = Rxn<MovieDetailEntity>(null);
+  MovieDetailEntity? get movieDetail => _movieDetail.value;
+  set movieDetail(MovieDetailEntity? value) => _movieDetail.value = value;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   final imageUrl = Environment.imageUrl;
+  late int movieId;
+  Map<String, dynamic> params = {};
 
-  final Map<String, dynamic> movieDetail = {
-    "adult": false,
-    "backdrop_path": "/sR0SpCrXamlIkYMdfz83sFn5JS6.jpg",
-    "belongs_to_collection": null,
-    "budget": 135000000,
-    "genres": [
-      {"id": 28, "name": "Ação"},
-      {"id": 878, "name": "Ficção científica"},
-      {"id": 12, "name": "Aventura"}
-    ],
-    "homepage": "",
-    "id": 823464,
-    "imdb_id": "tt14539740",
-    "original_language": "en",
-    "original_title": "Godzilla x Kong: The New Empire",
-    "overview":
-        "O poderoso Kong e o temível Godzilla se unem contra uma colossal ameaça mortal escondida no mundo dos humanos, que ameaça a existência de sua espécie e da nossa. Mergulhando profundamente nos mistérios da Ilha da Caveira e nas origens da Terra Oca, o filme irá explorar a antiga batalha de Titãs que ajudou a forjar esses seres extraordinários e os ligou à humanidade para sempre.",
-    "popularity": 5072.084,
-    "poster_path": "/kO6K9zEsKhNyqcrdGTSqAI6jrie.jpg",
-    "production_companies": [
-      {
-        "id": 923,
-        "logo_path": "/8M99Dkt23MjQMTTWukq4m5XsEuo.png",
-        "name": "Legendary Pictures",
-        "origin_country": "US"
-      },
-      {
-        "id": 174,
-        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
-        "name": "Warner Bros. Pictures",
-        "origin_country": "US"
-      }
-    ],
-    "production_countries": [
-      {"iso_3166_1": "US", "name": "United States of America"}
-    ],
-    "release_date": "2024-03-27",
-    "revenue": 194000000,
-    "runtime": 115,
-    "spoken_languages": [
-      {"english_name": "English", "iso_639_1": "en", "name": "English"}
-    ],
-    "status": "Released",
-    "tagline": "Levantem-se juntos ou caiam sozinhos.",
-    "title": "Godzilla e Kong: O Novo Império",
-    "video": false,
-    "vote_average": 6.808,
-    "vote_count": 274
-  };
   final List<String> genreList = [];
 
   @override
   void onReady() {
-    for (var genre in movieDetail['genres']) {
+    params = Get.parameters;
+    movieId = int.parse(params['id']);
+    fetchData();
+    super.onReady();
+  }
+
+  void fetchData() async {
+    await _getMovieDetail();
+    for (var genre in movieDetail!.genres) {
       genreList.add(genre['name']);
     }
-    super.onReady();
+  }
+
+  Future<void> _getMovieDetail() async {
+    try {
+      state = StateType.load;
+      movieDetail = await _getMovieDetailUsecase.call(movieId);
+      state = StateType.success;
+    } catch (e) {
+      state = StateType.error;
+      var message = "";
+      if (e is HttpException) {
+        message = "Não foi possivel carregar os dados.";
+      } else {
+        message = "Ocorreu um problema, tente novamente mais tarde.";
+      }
+      Get.snackbar("Ops!", message);
+    }
   }
 }

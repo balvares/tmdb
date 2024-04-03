@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb/app/core/shared/enum/state.dart';
 
 import '../../../../../shared/shared.dart';
 import '../../../../../shared/constants/keys.dart';
@@ -36,7 +37,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image.network(
-            "${controller.imageUrl}${controller.movieDetail['backdrop_path']}",
+            "${controller.imageUrl}${controller.movieDetail?.backdropPath}",
           ),
           Padding(
             padding: const EdgeInsets.all(layoutSpace16),
@@ -44,14 +45,14 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TmdbTitleGiant(
-                  text: "${controller.movieDetail['title']}",
+                  text: controller.movieDetail?.title ?? '',
                 ),
                 const SizedBox(height: layoutSpace4),
                 TmdbLabel(
                   fontSize: layoutSpace12,
                   color: TmdbColors.neutral3,
                   text:
-                      '${controller.movieDetail['runtime'].toString()}m | ${DateTime.parse(controller.movieDetail['release_date']).year.toString()}',
+                      '${controller.movieDetail?.runtime.toString()}m | ${controller.movieDetail?.releaseDate.year.toString()}',
                 ),
                 Row(
                   children: [
@@ -65,13 +66,13 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 TmdbLabel(
                   fontSize: layoutSpace12,
                   textAlign: TextAlign.justify,
-                  text: '${controller.movieDetail['overview']}',
+                  text: controller.movieDetail?.overview ?? '',
                 ),
                 // const SizedBox(height: layoutSpace12),
                 TmdbLabel(
                   fontSize: layoutSpace12,
                   textAlign: TextAlign.justify,
-                  text: '${controller.movieDetail['tagline']}',
+                  text: controller.movieDetail?.tagline ?? '',
                 ),
                 const SizedBox(height: layoutSpace48),
               ],
@@ -82,10 +83,19 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     );
   }
 
+  Widget _buildLoading() {
+    return const Center(
+      child: CircularProgressIndicator(
+        backgroundColor: TmdbColors.background,
+        color: TmdbColors.primary,
+      ),
+    );
+  }
+
   PreferredSizeWidget _buildAppBar() {
     return TmdbAppBar(
       key: const Key(homeAppBarKey),
-      title: TmdbTitle(text: controller.movieDetail['title']),
+      title: TmdbTitle(text: controller.movieDetail?.title ?? ''),
       leading: IconButton(
         onPressed: () => Get.back(),
         icon: const Icon(
@@ -98,10 +108,18 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-      appBar: _buildAppBar(),
-      backgroundColor: TmdbColors.background,
-    );
+    return Obx(() {
+      switch (controller.state) {
+        case StateType.success:
+          return Scaffold(
+            body: _buildBody(),
+            appBar: _buildAppBar(),
+            backgroundColor: TmdbColors.background,
+          );
+        case StateType.load:
+          return _buildLoading();
+      }
+      return Container();
+    });
   }
 }
