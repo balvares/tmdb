@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:tmdb/app/core/shared/enum/state.dart';
 
 import '../../../../../shared/shared.dart';
+import '../../../../core/shared/enum/state.dart';
 import '../../../../../shared/constants/keys.dart';
 import '../../../../../shared/widgets/widgets.dart';
 import '../controllers/movie_detail_controller.dart';
@@ -18,16 +18,32 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   final MovieDetailController controller = Get.find<MovieDetailController>();
 
   Widget _buildGenreChips(String genre) {
-    return Chip(
-      label: TmdbLabel(
-        text: genre,
-        fontSize: layoutSpace12,
+    return Container(
+      margin: const EdgeInsets.only(right: layoutSpace4),
+      child: Chip(
+        label: TmdbLabel(text: genre, fontSize: layoutSpace12),
+        padding: EdgeInsets.zero,
+        color: MaterialStateProperty.all(TmdbColors.dark),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(layoutSpace48),
+        ),
       ),
-      padding: EdgeInsets.zero,
-      color: MaterialStateProperty.all(TmdbColors.dark),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(layoutSpace48),
-      ),
+    );
+  }
+
+  Widget _buildRatingValue() {
+    String emoji = '⭐';
+    // if (controller.movieDetail!.voteAverage >= 7) {
+    //   emoji = '😀';
+    // } else if (controller.movieDetail!.voteAverage >= 5 &&
+    //     controller.movieDetail!.voteAverage < 7) {
+    //   emoji = '😐';
+    // } else {
+    //   emoji = '😠';
+    // }
+    return TmdbLabel(
+      text:
+          '$emoji ${controller.movieDetail?.voteAverage.toStringAsFixed(1)}/10',
     );
   }
 
@@ -48,13 +64,20 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                   text: controller.movieDetail?.title ?? '',
                 ),
                 const SizedBox(height: layoutSpace4),
-                TmdbLabel(
-                  fontSize: layoutSpace12,
-                  color: TmdbColors.neutral3,
-                  text:
-                      '${controller.movieDetail?.runtime.toString()}m | ${controller.movieDetail?.releaseDate.year.toString()}',
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TmdbLabel(
+                      fontSize: layoutSpace12,
+                      color: TmdbColors.neutral3,
+                      text:
+                          '${controller.movieDetail?.runtime.toString()}m | ${controller.movieDetail?.releaseDate.year.toString()}',
+                    ),
+                    _buildRatingValue(),
+                  ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     for (var genre in controller.genreList)
                       _buildGenreChips(genre),

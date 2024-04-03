@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:tmdb/app/core/routes/routes.dart';
-import 'package:tmdb/app/core/shared/enum/state.dart';
 
 import '../../../../../shared/shared.dart';
 import '../controllers/home_controller.dart';
+import '../../../../core/routes/routes.dart';
+import '../../../../core/shared/enum/state.dart';
 import '../../../../../shared/constants/keys.dart';
 import '../../../../../shared/widgets/widgets.dart';
 
@@ -71,7 +71,9 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              Get.toNamed(Routes.movieDetail);
+              Get.toNamed(Routes.movieDetail, parameters: {
+                "id": controller.upcomingMovies!.result[index].id.toString()
+              });
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
