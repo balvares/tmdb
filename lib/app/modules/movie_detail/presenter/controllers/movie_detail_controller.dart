@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:tmdb/app/core/providers/movie_credits/usecases/interfaces/get_movie_credits_usecase.dart';
 
+import '../../../../core/providers/movie_credits/domain/entities/movie_credits_entity.dart';
 import '../../../../core/shared/enum/state.dart';
 import '../../../../core/shared/utils/enviroment.dart';
 import '../../../../core/shared/errors/http_exception.dart';
@@ -9,10 +11,13 @@ import '../../../../core/providers/movie_detail/usecases/interfaces/get_movie_de
 
 class MovieDetailController extends GetxController {
   final GetMovieDetailUsecase _getMovieDetailUsecase;
+  final GetMovieCreditsUsecase _getMovieCreditsUsecase;
 
   MovieDetailController({
     required GetMovieDetailUsecase getMovieDetailUsecase,
-  }) : _getMovieDetailUsecase = getMovieDetailUsecase;
+    required GetMovieCreditsUsecase getMovieCreditsUsecase,
+  })  : _getMovieDetailUsecase = getMovieDetailUsecase,
+        _getMovieCreditsUsecase = getMovieCreditsUsecase;
 
   final _state = StateType.load.obs;
   get state => _state.value;
@@ -22,6 +27,11 @@ class MovieDetailController extends GetxController {
   MovieDetailEntity? get movieDetail => _movieDetail.value;
   set movieDetail(MovieDetailEntity? value) => _movieDetail.value = value;
 
+  final _movieCredits = Rxn<List<MovieCreditsEntity>>(null);
+  List<MovieCreditsEntity>? get movieCredits => _movieCredits.value;
+  set movieCredits(List<MovieCreditsEntity>? value) =>
+      _movieCredits.value = value;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final imageUrl = Environment.imageUrl;
   late int movieId;
@@ -29,6 +39,7 @@ class MovieDetailController extends GetxController {
   final minRatingValue = 1.0.obs;
 
   final List<String> genreList = [];
+  // late List<MovieCreditsEntity> movieCreditsWithImages;
 
   @override
   void onReady() {
@@ -43,12 +54,35 @@ class MovieDetailController extends GetxController {
     for (var genre in movieDetail!.genres) {
       genreList.add(genre['name']);
     }
+    await _getMovieCredits();
+    // for (var credit in movieCredits!) {
+    //   if (credit.profilePath != null) {
+    //     movieCreditsWithImages.add(credit);
+    //   }
+    // }
   }
 
   Future<void> _getMovieDetail() async {
     try {
       state = StateType.load;
       movieDetail = await _getMovieDetailUsecase.call(movieId);
+      state = StateType.success;
+    } catch (e) {
+      state = StateType.error;
+      var message = "";
+      if (e is HttpException) {
+        message = "Não foi possivel carregar os dados.";
+      } else {
+        message = "Ocorreu um problema, tente novamente mais tarde.";
+      }
+      Get.snackbar("Ops!", message);
+    }
+  }
+
+  Future<void> _getMovieCredits() async {
+    try {
+      state = StateType.load;
+      movieCredits = await _getMovieCreditsUsecase.call(movieId);
       state = StateType.success;
     } catch (e) {
       state = StateType.error;

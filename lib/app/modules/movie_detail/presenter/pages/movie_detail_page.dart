@@ -6,6 +6,7 @@ import '../../../../core/shared/enum/state.dart';
 import '../../../../../shared/constants/keys.dart';
 import '../../../../../shared/widgets/widgets.dart';
 import '../controllers/movie_detail_controller.dart';
+import '../../../../core/shared/utils/enviroment.dart';
 
 class MovieDetailPage extends StatefulWidget {
   const MovieDetailPage({super.key});
@@ -32,18 +33,9 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   }
 
   Widget _buildRatingValue() {
-    String emoji = '⭐';
-    // if (controller.movieDetail!.voteAverage >= 7) {
-    //   emoji = '😀';
-    // } else if (controller.movieDetail!.voteAverage >= 5 &&
-    //     controller.movieDetail!.voteAverage < 7) {
-    //   emoji = '😐';
-    // } else {
-    //   emoji = '😠';
-    // }
     return TmdbLabel(
       text:
-          'Nota: $emoji ${controller.movieDetail?.voteAverage.toStringAsFixed(1)}/10',
+          'Nota: ⭐ ${controller.movieDetail?.voteAverage.toStringAsFixed(1)}/10',
     );
   }
 
@@ -81,22 +73,50 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                       _buildGenreChips(genre),
                   ],
                 ),
-                const Divider(),
-                const SizedBox(height: layoutSpace120),
+
                 const Divider(),
                 TmdbLabel(
                   fontSize: layoutSpace12,
                   textAlign: TextAlign.justify,
                   text: controller.movieDetail?.overview ?? '',
                 ),
-                // const SizedBox(height: layoutSpace12),
                 TmdbLabel(
                   fontSize: layoutSpace12,
                   textAlign: TextAlign.justify,
                   text: controller.movieDetail?.tagline ?? '',
                 ),
-                const SizedBox(height: layoutSpace16),
-                // adicionar aqui o botão de avaliar filme
+                const Divider(),
+                // carrossel de atores
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.movieCredits?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final credit = controller.movieCredits?[index];
+                      if (credit?.profilePath != null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.network(
+                                "${Environment.imageUrl}${credit?.profilePath}",
+                                width: 100,
+                              ),
+                              const SizedBox(height: 4),
+                              TmdbLabel(
+                                fontSize: 8,
+                                text: credit?.name ?? '',
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

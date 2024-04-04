@@ -18,7 +18,7 @@ class AppTmdb extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: TmdbColors.primary),
       ),
       getPages: AppPages.pages,
-      initialRoute: Routes.login,
+      initialRoute: Routes.home,
     );
   }
 }
