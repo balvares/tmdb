@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../shared/shared.dart';
@@ -22,16 +23,17 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: GridView.builder(
+        itemCount: controller.popularMovies?.result.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           childAspectRatio: 1 / 1.8,
         ),
-        itemCount: controller.popularMovies!.result.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               Get.toNamed(Routes.movieDetail, parameters: {
-                "id": controller.popularMovies!.result[index].id.toString()
+                "id":
+                    controller.popularMovies?.result[index].id.toString() ?? ''
               });
             },
             child: Column(
@@ -39,7 +41,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Card(
                   child: Image.network(
-                    "${controller.imageUrl}${controller.popularMovies!.result[index].posterPath}",
+                    "${controller.imageUrl}${controller.popularMovies?.result[index].posterPath}",
                   ),
                 ),
                 Expanded(
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 4, right: 4),
                     child: TmdbLabel(
                       fontSize: controller.fontSize,
-                      text: controller.popularMovies!.result[index].title,
+                      text: controller.popularMovies?.result[index].title ?? '',
                     ),
                   ),
                 ),
@@ -67,20 +69,38 @@ class _HomePageState extends State<HomePage> {
           crossAxisCount: 3,
           childAspectRatio: 1 / 1.8,
         ),
-        itemCount: controller.upcomingMovies!.result.length,
+        itemCount: controller.upcomingMovies?.result.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               Get.toNamed(Routes.movieDetail, parameters: {
-                "id": controller.upcomingMovies!.result[index].id.toString()
+                "id":
+                    controller.upcomingMovies?.result[index].id.toString() ?? ''
               });
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Card(
-                  child: Image.network(
-                    "${controller.imageUrl}${controller.upcomingMovies!.result[index].posterPath}",
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        "${controller.imageUrl}${controller.upcomingMovies?.result[index].posterPath}",
+                      ),
+                      Positioned(
+                        left: 0,
+                        bottom: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          color: TmdbColors.darkTextColor,
+                          child: TmdbLabel(
+                            fontSize: controller.fontSize,
+                            text: DateFormat('dd/MM/yyyy').format(controller
+                                .upcomingMovies!.result[index].releaseDate),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 Expanded(
@@ -88,7 +108,8 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.only(left: 4, right: 4),
                     child: TmdbLabel(
                       fontSize: controller.fontSize,
-                      text: controller.upcomingMovies!.result[index].title,
+                      text:
+                          controller.upcomingMovies?.result[index].title ?? '',
                     ),
                   ),
                 ),
@@ -114,6 +135,31 @@ class _HomePageState extends State<HomePage> {
       child: CircularProgressIndicator(
         backgroundColor: TmdbColors.background,
         color: TmdbColors.primary,
+      ),
+    );
+  }
+
+  Widget _buildErrorMessage() {
+    return Scaffold(
+      appBar: _buildAppBar(),
+      backgroundColor: TmdbColors.background,
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TmdbTitle(
+              text: 'Oops! Não foi possível carregar a lista de títulos.',
+              textAlign: TextAlign.center,
+            ),
+            TmdbLabel(
+              fontSize: 12,
+              color: TmdbColors.defaultTextColor,
+              text: 'Por gentileza, tente novamente mais tarde.',
+            )
+          ],
+        ),
       ),
     );
   }
@@ -154,6 +200,8 @@ class _HomePageState extends State<HomePage> {
               key: controller.scaffoldKey,
               backgroundColor: TmdbColors.background,
             );
+          case StateType.error:
+            return _buildErrorMessage();
         }
         return Container();
       }),
