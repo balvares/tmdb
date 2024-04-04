@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/providers/movies/domain/entities/movie_result_entity.dart';
 import '../../../../core/shared/enum/state.dart';
 import '../../../../core/shared/utils/enviroment.dart';
 import '../../../../core/shared/errors/http_exception.dart';
