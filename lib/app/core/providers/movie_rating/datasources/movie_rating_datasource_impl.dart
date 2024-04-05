@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:get_storage/get_storage.dart';
 
 import '../../../shared/utils/enviroment.dart';
 import '../domain/models/movie_rating_model.dart';
@@ -11,7 +10,6 @@ import '../domain/models/requests/movie_rating_request.dart';
 
 class MovieRatingDatasourceImpl implements MovieRatingDatasource {
   final GetConnectBase _getConnect;
-  final localStorage = GetStorage();
 
   MovieRatingDatasourceImpl({
     required GetConnectBase getConnect,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/shared/enum/state.dart';
 import '../../../../core/shared/utils/enviroment.dart';
-import '../../../../core/shared/errors/http_exception.dart';
 import '../../../../core/providers/movies/domain/entities/movie_entity.dart';
 import '../../../../core/providers/movies/usecases/interfaces/get_popular_movies_usecase.dart';
 import '../../../../core/providers/movies/usecases/interfaces/get_upcoming_movies_usecase.dart';
@@ -53,13 +52,6 @@ class HomeController extends GetxController {
       state = StateType.success;
     } catch (e) {
       state = StateType.error;
-      var message = "";
-      if (e is HttpException) {
-        message = "Não foi possivel carregar os dados.";
-      } else {
-        message = "Ocorreu um problema, tente novamente mais tarde.";
-      }
-      Get.snackbar("Ops!", message);
     }
   }
 
@@ -70,13 +62,6 @@ class HomeController extends GetxController {
       state = StateType.success;
     } catch (e) {
       state = StateType.error;
-      var message = "";
-      if (e is HttpException) {
-        message = "Não foi possivel carregar os dados.";
-      } else {
-        message = "Ocorreu um problema, tente novamente mais tarde.";
-      }
-      Get.snackbar("Ops!", message);
     }
   }
 }

@@ -22,29 +22,20 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   Widget build(BuildContext context) {
     return Obx(() {
       switch (controller.state) {
+        case StateType.load:
+          return _buildLoading;
+        case StateType.error:
+          return _buildErrorMessage;
         case StateType.success:
           return Scaffold(
             body: _buildBody,
             appBar: _buildAppBar,
             backgroundColor: TmdbColors.background,
           );
-        case StateType.load:
-          return _buildLoading;
-        case StateType.error:
-          return _buildErrorMessage;
       }
       return Container();
     });
   }
-
-  PreferredSizeWidget get _buildAppBar => TmdbAppBar(
-        key: const Key(homeAppBarKey),
-        title: TmdbTitle(text: controller.movieDetail?.title ?? ''),
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back, color: TmdbColors.primary),
-        ),
-      );
 
   Widget get _buildLoading => const Center(
         child: CircularProgressIndicator(
@@ -72,6 +63,15 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               )
             ],
           ),
+        ),
+      );
+
+  PreferredSizeWidget get _buildAppBar => TmdbAppBar(
+        key: const Key(homeAppBarKey),
+        title: TmdbTitle(text: controller.movieDetail?.title ?? ''),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back, color: TmdbColors.primary),
         ),
       );
 
